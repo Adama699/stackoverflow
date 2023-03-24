@@ -9,9 +9,11 @@ class QuestionController extends Controller
 {
     public function index()
     {
-        $questions = Question::latest()->get();
+        $questions = Question::all();
 
-        return view('questions.index', compact('questions'));
+        return view('questions.index', [
+            'questions' => $questions
+        ]);
     }
 
     public function create()
@@ -21,22 +23,25 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
             'tags' => 'nullable',
         ]);
 
-        $question = auth()->user()->questions()->create($validatedData);
-        $question->tag($validatedData['tags']);
+        $questionData = $request->all();
+        $questionData['user_id'] = auth()->user()->id;;
 
-        return redirect()->route('questions.show', $question);
+        $newQuestion = Question::create($questionData);
+
+        return redirect()->route('questions.show', ['id' => $newQuestion->id]);
     }
 
-    public function show(Question $question)
+   /* public function show(Question $question)
     {
         return view('questions.show', compact('question'));
     }
+    */
 
     public function edit(Question $question)
     {
@@ -56,6 +61,13 @@ class QuestionController extends Controller
 
         return redirect()->route('questions.show', $question);
     }
+
+    public function show($id)
+    {
+        $question = Question::find($id);
+        return view('questions.show', ['question' => $question]);
+    }
+
 
     public function destroy(Question $question)
     {

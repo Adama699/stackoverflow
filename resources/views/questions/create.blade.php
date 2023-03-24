@@ -1,4 +1,4 @@
-<?php
+
 @extends('layouts.app')
 
 @section('content')
@@ -23,7 +23,7 @@
             <label for="tags">Tags :</label>
             <input type="text" name="tags" id="tags" value="{{ old('tags') }}">
         </div>
-        <button type="submit">Poser la question</button>
+        <button type="submit">Enregistrer</button>
     </form>
 @endsection
 
