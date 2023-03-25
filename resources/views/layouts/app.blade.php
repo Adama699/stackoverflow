@@ -73,6 +73,14 @@
         </nav>
 
         <main class="py-4 container" >
+            @if ($errors && $errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        <li>{{ $errors->all()[0] }}</li>
+                    </ul>
+                </div>
+            @endif
+
             @yield('content')
         </main>
     </div>

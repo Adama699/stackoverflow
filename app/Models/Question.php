@@ -10,10 +10,13 @@ class Question extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
+        'titre',
         'body',
-        'user_id'
+        'user_id',
     ];
-
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 
 }

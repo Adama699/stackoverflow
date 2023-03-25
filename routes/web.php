@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
+use App\Models\Question;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuestionController;
 
@@ -26,6 +28,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
 });
+Route::post('/questions/{id}/answers', [AnswerController::class, 'store'])->name('answers.store');
+Route::get('/questions/{question}/answers/{answers}/edit', [AnswerController::class, 'edit'])->name('answers.edit');
+Route::put('/questions/{question}/answers/{answers}', [AnswerController::class, 'update'])->name('answers.update');
+Route::delete('/questions/{question}/answers/{answers}', [AnswerController::class, 'destroy'])->name('answers.destroy');
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,7 +45,10 @@ Route::middleware(['auth'])->group(function () {
 */
 
 Route::get('/', function () {
-    return view('welcome');
+
+    $question = Question::all();
+
+    return view('welcome', ['questions' => $question]);
 })->name('home');
 
 Auth::routes();
