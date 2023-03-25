@@ -21,7 +21,6 @@
                                         <th>Titre</th>
                                         <th>Tag</th>
                                         <th>Body</th>
-                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
