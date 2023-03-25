@@ -12,6 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('answers', function (Blueprint $table) {
+            $table->text('content');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('question_id')->constrained();
             $table->id();
             $table->timestamps();
         });
@@ -22,6 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('answers');
+        Schema::table('answers', function (Blueprint $table) {
+            $table->dropColumn('content');
+        });
     }
 };

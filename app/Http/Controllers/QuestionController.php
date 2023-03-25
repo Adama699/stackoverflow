@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Categorie;
 
 use App\Models\Question;
+use App\Models\Answer;
+
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -23,12 +26,12 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        /*$request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
             'tags' => 'nullable',
         ]);
-
+           */
         $questionData = $request->all();
         $questionData['user_id'] = auth()->user()->id;;
 
@@ -43,21 +46,23 @@ class QuestionController extends Controller
     }
     */
 
-    public function edit(Question $question)
+    public function edit($id)
     {
+        $question = Question::find($id);
         return view('questions.edit', compact('question'));
     }
 
-    public function update(Request $request, Question $question)
+    public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
+        /* $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
             'tags' => 'nullable',
-        ]);
+        ]);*/
 
-        $question->update($validatedData);
-        $question->retag($validatedData['tags'] ?? '');
+        $question = Question::find($id);
+        $question->update($request->all());
+//        $question->retag($validatedData['tags'] ?? '');
 
         return redirect()->route('questions.show', $question);
     }
@@ -69,8 +74,13 @@ class QuestionController extends Controller
     }
 
 
-    public function destroy(Question $question)
+    public function destroy($id)
     {
+        $question = Question::find($id);
+
+        if (!$question) {
+            return redirect()->back()->withErrors('La question n\'existe pas.');
+        }
         $question->delete();
 
         return redirect()->route('questions.index');
